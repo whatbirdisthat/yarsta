@@ -32,20 +32,16 @@
     var me = $(this);
     me.hide();
     Presenter.Register('StaffMember', function(theMember) {
+      me.data('myMemberId', theMember.id);
       if (!theMember) {
         me.hide();
         return;
       }
-      if (theMember.lastEvent) {
-        me.text('Clock Out');
-      } else {
-        me.text('Clock In');
-      }
+      me.text(theMember.lastEvent ? 'Clock Out' : 'Clock In');
       me.show();
     });
     me.click(function(e) {
-      var memberSelect = me.parent().find("select");
-      var theMember = Model.StaffMember.GetById(memberSelect.val());
+      var theMember = Model.StaffMember.GetById(me.data('myMemberId'));
       theMember.lastEvent = !theMember.lastEvent;
       var theEvent = Model.StaffEvent.Create(theMember);
       Presenter.Refresh('StaffEvent', theEvent);
@@ -53,7 +49,7 @@
     });
     return me;
   };
-  $.fn.IsActivityIndicator = function(memberSelect) {
+  $.fn.IsActivityIndicator = function() {
     var me = $(this);
     me.addClass('activity-indicator');
     Presenter.Register('StaffMember',function(theMember) {
@@ -79,27 +75,34 @@
       var logText = "{0} {1} {2}".format(eventDate, theMember.name, inOrOut);
       me.append($("<li>").text(logText).addClass((theEvent[0]%2===0?'a-line':'b-line')));
     };
-    for (var i = 0; i < Model.StaffEvent.Count(); i++) {
-      var eachEvent = Model.StaffEvent.Get(i);
-      appendToLog(eachEvent);
-    }
+    Presenter.Initialize('StaffEvent', function() {
+      for (var i = 0; i < Model.StaffEvent.Count(); i++) {
+        var eachEvent = Model.StaffEvent.Get(i);
+        appendToLog(eachEvent);
+      }
+    });
     Presenter.Register("StaffEvent", function(theEvent){
       appendToLog(theEvent);
     });
+
     return me;
   };
   $.fn.IsApplicationViewport = function() {
-    var memberSelect = $("<select>").IsNameSelector();
-    $(this).append(memberSelect);
-    $(this).append($("<input>").IsIDField());
-    $(this).append($("<button>").IsClockInOutButton());
-    $(this).append($("<span>").IsActivityIndicator(memberSelect));
-    $(this).append($("<ol>").IsEventLog());
-    return $(this);
+    var me = $(this);
+    if (me.prop('loaded')) return;
+    me.prop('loaded', true);
+    me.append($("<select>").IsNameSelector());
+    me.append($("<input>").IsIDField());
+    me.append($("<button>").IsClockInOutButton());
+    me.append($("<span>").IsActivityIndicator());
+    me.append($("<ol>").IsEventLog());
+    return me;
   };
 })(jQuery);
 $(function() {
-  $("#apptitle").text("Online Timesheet Sign-in");
-  $("#appviewport").IsApplicationViewport();
+  Presenter.Initialize('StaffMember', function() {
+    $("#apptitle").text("Online Timesheet Sign-in");
+    $("#appviewport").IsApplicationViewport();
+  });
 });
 
