@@ -2,15 +2,15 @@
   $.fn.IsNameSelector = function() {
     var me = $(this);
     me.append($("<option>").prop('text', 'Select a name...'));
-    for (var i = 0; i < Controller.StaffMember.Count(); i++) {
-      var theStaffMember = Controller.StaffMember.Get(i);
+    for (var i = 0; i < Model.StaffMember.Count(); i++) {
+      var theStaffMember = Model.StaffMember.Get(i);
       var theOption = $("<option>");
       theOption.prop('value', theStaffMember.id);
       theOption.prop('text', theStaffMember.name);
       me.append(theOption);
     }
     me.change(function(e) {
-      var theMember = Controller.StaffMember.GetById(e.target.value);
+      var theMember = Model.StaffMember.GetById(e.target.value);
       Presenter.Refresh('StaffMember', theMember);
     });
     return me;
@@ -45,9 +45,9 @@
     });
     me.click(function(e) {
       var memberSelect = me.parent().find("select");
-      var theMember = Controller.StaffMember.GetById(memberSelect.val());
+      var theMember = Model.StaffMember.GetById(memberSelect.val());
       theMember.lastEvent = !theMember.lastEvent;
-      var theEvent = Controller.StaffEvent.Create(theMember);
+      var theEvent = Model.StaffEvent.Create(theMember);
       Presenter.Refresh('StaffEvent', theEvent);
       Presenter.Refresh('StaffMember', theMember);
     });
@@ -73,22 +73,14 @@
   $.fn.IsEventLog = function() {
     var me = $(this);
     var appendToLog = function(theEvent) {
-      var theMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      var theMember = Controller.StaffMember.GetById(theEvent[1]);
+      var theMember = Model.StaffMember.GetById(theEvent[1]);
       var eventDate = new Date(theEvent[3]);
-      var dateStr = "{0} {1} {2} {3}:{4}:{5}".format(
-          theMonths[eventDate.getMonth(i)],
-          eventDate.getDay().padZero(),
-          eventDate.getFullYear(),
-          eventDate.getHours().padZero(),
-          eventDate.getMinutes().padZero(),
-          eventDate.getSeconds().padZero()
-      );
-      var logText = "{0} {1} {2}".format(dateStr, theMember.name, theEvent[2] ? 'In' : 'Out');
+      var inOrOut = theEvent[2] ? 'In' : 'Out';
+      var logText = "{0} {1} {2}".format(eventDate, theMember.name, inOrOut);
       me.append($("<li>").text(logText).addClass((theEvent[0]%2===0?'a-line':'b-line')));
     };
-    for (var i = 0; i < Controller.StaffEvent.Count(); i++) {
-      var eachEvent = Controller.StaffEvent.Get(i);
+    for (var i = 0; i < Model.StaffEvent.Count(); i++) {
+      var eachEvent = Model.StaffEvent.Get(i);
       appendToLog(eachEvent);
     }
     Presenter.Register("StaffEvent", function(theEvent){
