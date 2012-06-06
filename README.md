@@ -13,6 +13,8 @@ The Presenter
 is a solution to the event thing, and the data binding thing.
 jQuery plugins are cool for descriptive work, so "element x is a y".
 
+In the appviewport code we define some view controls:
+
     var eventLog = $("<span>").IsEventLog();
 
 Inside the $.fn.IsEventLog function:
@@ -40,8 +42,9 @@ The Model
 is a solution to the decouple the GUI from the server thing. I want to run this
 without any server, in 'demo' mode. That is achieved by implementing a 'mock'
 server. This server is kind of abstract, so it doesn't really exist in the code
-either, there being only the mock data model and its staff.js mock database.
+either, there being only the mock data model and its json mock database.
 
-Plugging in a real server is a matter of re-implementing the model.
-
+Plugging in the server is a matter of writing some server code to replace
+StaffEvents.json and StaffMembers.json, and implementing some client code
+to send off the sync messages.
 
