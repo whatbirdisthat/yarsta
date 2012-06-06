@@ -15,16 +15,16 @@ jQuery plugins are cool for descriptive work, so "element x is a y".
 
     var eventLog = $("<span>").IsEventLog();
 
-Inside the $.fn.IsActivityMonitor function:
+Inside the $.fn.IsEventLog function:
 
-    Presenter.Register("Events", function(theThing) {
+    Presenter.Register("Event", function(theThing) {
       ...
       //check theThing and $(this).text() or .append() as necessary etc
       ...
     };
 
-Channels correspond to models, so `Model.StaffEvents` is wired to the 
-`staffevents` channel.
+Channels correspond to models, so `Model.StaffEvent` is wired to the 
+`StaffEvent` channel.
 
 So bound elements look after themselves, so to speak. This is a reaction to
 code where the click of a button caused all sorts of elements to refresh -
@@ -32,7 +32,8 @@ only that code was inside the click handler and all the elements had to be
 jQuery.find()'ed ... Elements register to a GUI channel and receive calls
 from the Presenter instead. Then when an element makes a change to the
 'context' object (StaffMember x), the Presenter sends a reference to it
-to all the registered callback functions.
+to all the registered callback functions, and they redraw themselves if 
+necessary.
 
 The Model 
 ==============
