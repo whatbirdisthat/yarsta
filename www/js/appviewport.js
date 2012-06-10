@@ -89,8 +89,6 @@
   };
   $.fn.IsApplicationViewport = function() {
     var me = $(this);
-    if (me.prop('loaded')) return;
-    me.prop('loaded', true);
     me.append($("<select>").IsNameSelector());
     me.append($("<input>").IsIDField());
     me.append($("<button>").IsClockInOutButton());
@@ -99,9 +97,10 @@
     return me;
   };
 })(jQuery);
+
 $(function() {
+  $("#apptitle").text("Online Timesheet Sign-in");
   Presenter.Initialize('StaffMember', function() {
-    $("#apptitle").text("Online Timesheet Sign-in");
     $("#appviewport").IsApplicationViewport();
   });
 });

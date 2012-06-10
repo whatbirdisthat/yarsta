@@ -1,9 +1,7 @@
-
 var Model = {
   Datasource: {
     get: function(modelname, callback) {
       $.ajax({
-        async: false,
         url: "js/{0}.json".format(modelname),
         error: function(err,msg,exc) {
           console.info(msg);
@@ -22,15 +20,9 @@ var Model = {
       Model.Datasource.get("StaffMember", callback);
     },
     Count: function() {
-      if (Model.StaffMember.list === null) {
-        Model.StaffMember.RefreshList();
-      }
       return Model.StaffMember.list.length;
     },
     Get: function(index) {
-      if (Model.StaffMember.list === null) {
-        Model.StaffMember.RefreshList();
-      }
       return Model.StaffMember.list[index];
     },
     GetById: function(id) {
@@ -49,7 +41,7 @@ var Model = {
         var theMember = Model.StaffMember.list[i];
         if (theMember.id == newObj.id) {
           Model.StaffMember.list[i] = newObj;
-          //send off the new value to the serveri as JSON
+          //send off the new value to the server
           break;
         }
       }
@@ -64,7 +56,6 @@ var Model = {
       return Model.StaffEvent.list.length;
     },
     Get: function(index) {
-      //Staff.Events should be a lazy loaded data set
       return Model.StaffEvent.list[index];
     },
     Set: function(newObj) {
