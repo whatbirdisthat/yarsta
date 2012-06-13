@@ -59,6 +59,7 @@ var Model = {
       return Model.StaffEvent.list[index];
     },
     Set: function(newObj) {
+      console.info("EVENT.SET actually called!");
       for (var i = 0; i < Model.StaffEvent.list.length; i++) {
         var theEvent = Model.StaffEvent.list[i];
         if (theEvent[0] == newObj[0]) {
@@ -74,6 +75,18 @@ var Model = {
       var theEvent = [eventID, staffMember.id, staffMember.lastEvent, thisDate.getTime()];
       Model.StaffEvent.list.push(theEvent);
       //send off the new value to the server
+      $.ajax({
+        url: "/dataservice/Service1.asmx/AddEvent",
+        data: newObj,
+        success: function(serverResponse) {
+          console.info('successfully added new event');
+          console.info(serverResponse);
+        },
+        error: function(serverResponse) {
+          console.info('error adding new event');
+          console.info(serverResponse);
+        }
+      });
       return theEvent;
     }
   }

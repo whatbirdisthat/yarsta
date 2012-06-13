@@ -28,14 +28,19 @@ Inside the $.fn.IsEventLog function:
 Channels correspond to models, so `Model.StaffEvent` is wired to the 
 `StaffEvent` channel.
 
-So bound elements look after themselves, so to speak. This is a reaction to
+Bound elements look after themselves, so to speak. This is a reaction to
 code where the click of a button caused all sorts of elements to refresh -
-only that code was inside the click handler and all the elements had to be
-jQuery.find()'ed ... Elements register to a GUI channel and receive calls
-from the Presenter instead. Then when an element makes a change to the
-'context' object (StaffMember x), the Presenter sends a reference to it
-to all the registered callback functions, and they redraw themselves if 
-necessary.
+
+    $(body).append($("<span>").click(function(e){
+      $("#idspan").text(newtext);
+      $("#field1").text(newfield1);
+      $("#field2").text(newfield2);
+    }).attr("id", "clickspan-1"));
+
+Elements register to a GUI channel and receive calls from the Presenter instead.
+Then when an element makes a change to the 'context' object (StaffMember x),
+the Presenter sends a reference to it to all the registered callback functions,
+and they redraw themselves if necessary.
 
 The Model 
 ==============
