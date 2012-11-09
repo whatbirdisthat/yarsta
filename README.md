@@ -1,7 +1,7 @@
 yarsta
 ======
 
-Yet another really small timesheet application
+Yet another really small timesheet application.
 
 The lightbulb image is from iconarchive, resized. Thanks to them.
 
